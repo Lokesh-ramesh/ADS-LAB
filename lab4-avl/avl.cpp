@@ -154,6 +154,15 @@ Node* deleteNode(Node* root, int key)
     }
     return root;
 }
+void preOrder(Node *root)  
+{  
+    if(root != NULL)  
+    {  
+        cout << root->key << " ";  
+        preOrder(root->left);  
+        preOrder(root->right);  
+    }  
+}
 void levelorder_newline(struct Node *v){
         queue <struct Node *> q;
         struct Node *cur;
@@ -191,6 +200,12 @@ Node *root = NULL;
     root = insert(root, in);
   }
    cout << "\n----Tree----\n";
+   cout << "Preorder traversal of the "
+            "constructed AVL tree is \n";  
+    preOrder(root);  
+   cout<<endl;
+   cout<<" "<<endl;
+   
     levelorder_newline(root);
    cout<<endl;
    cout<<"Enter the element to be deleted"<<endl;
