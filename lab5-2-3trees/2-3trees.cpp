@@ -135,11 +135,9 @@ void TreeNode::traverse()
 	cout<<endl;
 	int i;
 	for(i=0; i<n; i++)
-	{
-		if(leaf == false)
+	{	if(leaf == false)
 			child[i]->traverse();
 		cout<<" "<<keys[i];
-
 	}
 	if(leaf == false)
 		child[i]->traverse();
@@ -267,29 +265,21 @@ void TreeNode::borrowFromPrev(int idx)
 
 void TreeNode::borrowFromNext(int idx)
 {
-
     	TreeNode *c=child[idx];
     	TreeNode *sibling=child[idx+1];
-
     	c->keys[(c->n)] = keys[idx];
-
     	if (!(c->leaf))
         	c->child[(c->n)+1] = sibling->child[0];
-
     	keys[idx] = sibling->keys[0];
-
     	for (int i=1; i<sibling->n; ++i)
         	sibling->keys[i-1] = sibling->keys[i];
-
     	if (!sibling->leaf)
     	{
         	for(int i=1; i<=sibling->n; ++i)
-            		sibling->child[i-1] = sibling->child[i];
+            	sibling->child[i-1] = sibling->child[i];
     	}
-
     	c->n += 1;
     	sibling->n -= 1;
-
     	return;
 }
 
@@ -297,27 +287,20 @@ void TreeNode::merge(int idx)
 {
     	TreeNode *c = child[idx];
     	TreeNode *sibling = child[idx+1];
-
     	c->keys[1] = keys[idx];
-
     	for (int i=0; i<sibling->n; ++i)
         	c->keys[i+2] = sibling->keys[i];
-
     	if (!c->leaf)
     	{
         	for(int i=0; i<=sibling->n; ++i)
             		c->child[i+2] = sibling->child[i];
     	}
-
     	for (int i=idx+1; i<n; ++i)
         	keys[i-1] = keys[i];
-
     	for (int i=idx+2; i<=n; ++i)
         	child[i-1] = child[i];
-
     	c->n += sibling->n+1;
     	n--;
-
     	delete(sibling);
     	return;
 }
@@ -329,9 +312,7 @@ void Tree::remove(int k)
         	cout << "The tree is empty\n";
         	return;
     	}
-
     	root->remove(k);
-
     	if (root->n==0)
     	{
         	TreeNode *tmp = root;
@@ -339,13 +320,10 @@ void Tree::remove(int k)
             		root = NULL;
         	else
             		root = root->child[0];
-
         	delete tmp;
     	}
     	return;
 }
-
-
 
 int main()
 {
@@ -353,7 +331,6 @@ int main()
     int ch;
 	int n,k;
 	cout<<"2-3 Trees"<<"\n";
-
 	cout<<"1.Insert\n2.Delete\n3.Display\n";
     while(1)
     {
@@ -373,7 +350,6 @@ int main()
             cin>>k;
             t.remove(k);
             break;
-
 	case 3: cout << "Traversal of tree constructed is\n";
             t.traverse();
             break;
