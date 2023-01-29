@@ -1,113 +1,101 @@
 #include<iostream>
-#include<cstdlib>
-#include<string>
-#include<cstdio>
+#include<conio.h>
+#include<stdlib.h>
 using namespace std;
-const int T_S = 200;
-class HashTableEntry {
-   public:
-      int k;
-      int v;
-      HashTableEntry(int k, int v) {
-         this->k= k;
-         this->v = v;
-      }
+# define max 10
+typedef struct list
+{
+    int data;
+    struct list *next;
+} node_type;
+node_type *ptr[max],*root[max],*temp[max];
+class Dictionary
+{
+public:
+    int index;
+    Dictionary();
+    void insert(int);
+    void search(int);
+    void delete_ele(int);
 };
-class HashMapTable {
-   private:
-      HashTableEntry **t;
-   public:
-      HashMapTable() {
-         t = new HashTableEntry * [T_S];
-         for (int i = 0; i< T_S; i++) {
-            t[i] = NULL;
-         }
-      }
-      int HashFunc(int k) {
-         return k % T_S;
-      }
-      void Insert(int k, int v) {
-         int h = HashFunc(k);
-         while (t[h] != NULL && t[h]->k != k) {
-            h = HashFunc(h + 1);
-         }
-         if (t[h] != NULL)
-            delete t[h];
-         t[h] = new HashTableEntry(k, v);
-      }
-      int SearchKey(int k) {
-         int h = HashFunc(k);
-         while (t[h] != NULL && t[h]->k != k) {
-            h = HashFunc(h + 1);
-         }
-         if (t[h] == NULL)
-            return -1;
-         else
-            return t[h]->v;
-      }
-      void Remove(int k) {
-         int h = HashFunc(k);
-         while (t[h] != NULL) {
-            if (t[h]->k == k)
-               break;
-            h = HashFunc(h + 1);
-         }
-         if (t[h] == NULL) {
-            cout<<"No Element found at key "<<k<<endl;
-            return;
-         } else {
-            delete t[h];
-         }
-         cout<<"Element Deleted"<<endl;
-      }
-      ~HashMapTable() {
-         for (int i = 0; i < T_S; i++) {
-            if (t[i] != NULL)
-               delete t[i];
-               delete[] t;
-         }
-      }
-};
-int main() {
-   HashMapTable hash;
-   int k, v;
-   int c;
-   while (1) {
-      cout<<"1.Insert element into the table"<<endl;
-      cout<<"2.Search element from the key"<<endl;
-      cout<<"3.Delete element at a key"<<endl;
-      cout<<"4.Exit"<<endl;
-      cout<<"Enter your choice: ";
-      cin>>c;
-      switch(c) {
-         case 1:
-            cout<<"Enter element to be inserted: ";
-            cin>>v;
-            cout<<"Enter key at which element to be inserted: ";
-            cin>>k;
-            hash.Insert(k, v);
-         break;
-         case 2:
-            cout<<"Enter key of the element to be searched: ";
-            cin>>k;
-            if (hash.SearchKey(k) == -1) {
-               cout<<"No element found at key "<<k<<endl;
-               continue;
-            } else {
-               cout<<"Element at key "<<k<<" : ";
-               cout<<hash.SearchKey(k)<<endl;
+Dictionary::Dictionary()
+{
+    index=-1;
+    for(int i=0; i<max; i++)
+    {
+        root[i]=NULL;
+        ptr[i]=NULL;
+        temp[i]=NULL;
+    }
+}
+void Dictionary::insert(int key)
+{
+    index=int(key%max);
+    ptr[index]=(node_type*)malloc(sizeof(node_type));
+    ptr[index]->data=key;
+    if(root[index]==NULL)
+    {
+        root[index]=ptr[index];
+        root[index]->next=NULL;
+        temp[index]=ptr[index];
+    }
+    else
+    {
+        temp[index]=root[index];
+        while(temp[index]->next!=NULL)
+            temp[index]=temp[index]->next;
+        temp[index]->next=ptr[index];
+    }
+}
+void Dictionary::search(int key)
+{
+    int flag=0;
+    index=int(key%max);
+    temp[index]=root[index];
+    while(temp[index]!=NULL)
+    {
+        if(temp[index]->data==key)
+        {
+            cout<<"\nSearch key is found";
+            flag=1;
+            break;
+        }
+        else temp[index]=temp[index]->next;
+    }
+    if (flag==0)
+        cout<<"\nsearch key not found.......\n";
+}
+
+main()
+{
+    int val,ch,n,num;
+    char c;
+    Dictionary d;
+    while(1)
+    {
+        cout<<"\n MENU:\n1.Create";
+        cout<<"\n2.Search for a value\n";
+        cout<<"\nEnter your choice:";
+        cin>>ch;
+        switch(ch)
+        {
+        case 1:
+            cout<<"\nEnter the number of elements to be inserted:"<<endl;
+            cin>>n;
+            cout<<"\nEnter the elements to be inserted:"<<endl;
+            for(int i=0; i<n; i++)
+            {
+                cin>>num;
+                d.insert(num);
             }
-         break;
-         case 3:
-            cout<<"Enter key of the element to be deleted: ";
-            cin>>k;
-            hash.Remove(k);
-         break;
-         case 4:
-            exit(1);
-         default:
-            cout<<"\nEnter correct option\n";
-      }
-   }
-   return 0;
+            break;
+        case 2:
+            cout<<"\nEnter the element to be searched:";
+            cin>>n;
+            d.search(n);
+            break;
+        default:
+            cout<<"\nInvalid Choice.";
+        }
+    }
 }
